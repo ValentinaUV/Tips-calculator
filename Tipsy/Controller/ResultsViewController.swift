@@ -12,18 +12,15 @@ class ResultsViewController: UIViewController {
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var settingsLabel: UILabel!
     
-    var calculatedBill = "0.00"
-    var splitNumber = "2"
-    var tip = "10%"
+    var result: Result!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        totalLabel.text = calculatedBill
-        settingsLabel.text = "Split between \(splitNumber) people, with \(tip) tip."
+        totalLabel.text = result.calculatedBill
+        settingsLabel.text = "Split between \(result.splitNumber) people, with \(result.tip) tip."
     }
     
     @IBAction func recalculatePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-
 }

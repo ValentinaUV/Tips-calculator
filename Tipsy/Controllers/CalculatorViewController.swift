@@ -16,10 +16,14 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var twentyPctButton: UIButton!
     @IBOutlet weak var splitNumberLabel: UILabel!
     
-    var selectedTip = "10%"
-    var splitNumber = "2"
-    var bill: Float = 0
-    var calculatedBill = "0.00"
+    var selectedTip: String?
+    var splitNumber: String?
+    var calculatedBill: String?
+    let tipValues: [String: Float] = [
+        "0%": 0.0,
+        "10%": 0.1,
+        "20%": 0.2
+    ]
     
     @IBAction func tipChanged(_ sender: UIButton) {
         billTextField.endEditing(true)
@@ -38,25 +42,35 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func calculatePressed(_ sender: UIButton) {
-        let tipValue = (selectedTip as NSString).floatValue/100
-        print(splitNumber)
-        let billValue = Float(billTextField.text!) ?? 0
+//        guard let tip = selectedTip else {let tip = "10%"}
+        let tip = selectedTip ?? "10%"
+        let tipValue = tipValues[tip] ?? 0.1
         
-        bill = (billValue + billValue*tipValue)/Float(splitNumber)!
+//        let tip = selectedTip ?? "10%"
+//        tipValue = tipValues[tip]
+//        guard let billText = billTextField.text else {let billText = ""}
+        let billText = billTextField.text ?? "0"
+        
+        let nr = Float(splitNumber ?? "2") ?? 2.0
+//        guard let nr = splitNumber else {return}
+
+        let billValue = Float(billText) ?? 0
+        let bill = (billValue + billValue*tipValue)/nr
         calculatedBill = String(format: "%0.2f", bill)
         
         print(calculatedBill)
         
         self.performSegue(withIdentifier: "goToResults", sender: self)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToResults" {
-            let destinationVC = segue.destination as! ResultsViewController
-            destinationVC.splitNumber = splitNumber
-            destinationVC.tip = selectedTip
-            destinationVC.calculatedBill = calculatedBill
-        }
+//        if segue.identifier == "goToResults" {
+//            let destinationVC = segue.destination as! ResultsViewController
+//            destinationVC.splitNumber = splitNumber
+//            destinationVC.tip = selectedTip
+//            destinationVC.calculatedBill = calculatedBill
+//        }
     }
 }
 

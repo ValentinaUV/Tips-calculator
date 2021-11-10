@@ -7,3 +7,9 @@
 //
 
 import Foundation
+
+struct Result {
+    let calculatedBill: String
+    let splitNumber: String
+    let tip: String
+}

@@ -18,29 +18,7 @@ class CalculatorViewController: UIViewController {
     
     var tipsButtons: [Tips: UIButton]!
     var result: Result!
-    
-    var billValue: Double {
-        guard let inputBillValue = billTextField.text,
-              let billValue = Double(inputBillValue) else {
-                  return 0
-              }
-        
-        return billValue
-    }
-    
-    func getTip() -> Tips? {
-       return tipsButtons.first { (key: Tips, button: UIButton) in
-            button.isSelected
-        }?.key
-    }
-    
-    func getSplitNumber() -> Double? {
-        guard let splitNumber = splitNumberLabel.text else {
-            return nil
-        }
-        return Double(splitNumber)
-    }
-    
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTipButtons()
@@ -76,28 +54,13 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func calculatePressed(_ sender: UIButton) {
-        guard let tip = getTip(),
-              let splitNumber = getSplitNumber()
-             else {
-                 print("Some of the fields are not filled.")
-                 return
-              }
-        
-        let calculatedBill = split(bill: billValue, tip: tip, splitNumber: splitNumber)
-        result = Result(
-            calculatedBill: String(format: "%.2f", calculatedBill),
-            splitNumber: String(format: "%.0f", splitNumber),
-            tip: tip.displayValue
-        )
-        print(calculatedBill)
+        result = Calculator(billTextField: billTextField, splitNumberLabel: splitNumberLabel, tipsButtons: tipsButtons).split()
+      
+        print(result!)
 
         self.performSegue(withIdentifier: "goToResults", sender: self)
     }
-    
-    func split(bill billValue: Double, tip: Tips, splitNumber: Double) -> Double {
-        return billValue * (1 + tip.rawValue) / splitNumber
-    }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToResults" {
             let destinationVC = segue.destination as! ResultsViewController
